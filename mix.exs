@@ -7,15 +7,11 @@ defmodule Speakers.MixProject do
       version: "0.2.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
+      name: "speakers",
       description: description(),
       package: package(),
-      rustler_crates: [
-        speakers_nifaudio: [
-          path: "native/speakers_nifaudio",
-          mode: if(Mix.env() == :prod, do: :release, else: :debug)
-        ]
-      ],
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -49,6 +45,13 @@ defmodule Speakers.MixProject do
       maintainers: ["Raza Gill"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/paulgoetze/speakers"}
+    ]
+  end
+
+  defp aliases do
+    [
+      # always force building the NIF for test runs:
+      test: [fn _ -> System.put_env("SPEAKERS_BUILD", "true") end, "test"]
     ]
   end
 end

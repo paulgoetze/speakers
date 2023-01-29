@@ -41,7 +41,6 @@ pub fn add_to_queue<'a>(env: Env<'a>, file_path: String) -> Result<Term<'a>, Err
     let source = rodio::Decoder::new(BufReader::new(file)).unwrap();
 
     CURRENT_SINK.append(source);
-
     Ok((atoms::ok()).encode(env))
 }
 
@@ -52,9 +51,9 @@ pub fn get_volume<'a>(env: Env<'a>) -> Result<Term<'a>, Error> {
 }
 
 #[rustler::nif]
-pub fn set_volume<'a>(env: Env<'a>, new_volume: f32) -> Result<Term<'a>, Error> {
-    let new_set_volume = CURRENT_SINK.set_volume(new_volume);
-    Ok((atoms::ok(), new_set_volume).encode(env))
+pub fn set_volume<'a>(env: Env<'a>, volume: f32) -> Result<Term<'a>, Error> {
+    CURRENT_SINK.set_volume(volume);
+    Ok((atoms::ok(), volume).encode(env))
 }
 
 rustler::init!(
