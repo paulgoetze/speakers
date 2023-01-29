@@ -54,8 +54,9 @@ jobs:
         shell: bash
         run: |
           case ${{ matrix.job.target }} in
-            arm-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y install gcc-arm-linux-gnueabihf ;;
-            aarch64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y install gcc-aarch64-linux-gnu ;;
+            arm-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y --no-install-recommends install gcc-arm-linux-gnueabihf libasound2-dev pkg-config ;;
+            aarch64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y --no-install-recommends install gcc-aarch64-linux-gnu libasound2 libasound2-dev pkg-config ;;
+            x86_64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y --no-install-recommends install libasound2-dev pkg-config ;;
           esac
 
       - name: Extract crate information

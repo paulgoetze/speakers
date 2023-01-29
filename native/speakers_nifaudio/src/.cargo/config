@@ -26,3 +26,10 @@ rustflags = [
 rustflags = [
   "-C", "target-feature=-crt-static"
 ]
+
+[build]
+
+[target.arm-unknown-linux-gnueabihf.libasound]
+linker = "arm-linux-gnueabihf-gcc"
+rustc-link-lib = ["libasound"]
+rustc-link-search = ["/usr/lib/arm-linux-gnueabihf"]

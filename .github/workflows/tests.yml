@@ -46,6 +46,11 @@ jobs:
             _build
             !_build/*/lib/speakers
           key: ${{ runner.os }}[${{ matrix.otp }}/${{ matrix.elixir }}]-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+      - name: Install prerequisites
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends libasound2-dev pkg-config
       - run: mix deps.get
       - run: mix deps.compile
       - run: mix compile --warnings-as-errors
