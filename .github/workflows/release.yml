@@ -23,17 +23,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nif: ["2.16", "2.15", "2.14"]
+        nif: ["2.16"]
         job:
           - { target: arm-unknown-linux-gnueabihf, os: ubuntu-20.04, use-cross: true }
-          - { target: aarch64-unknown-linux-gnu, os: ubuntu-20.04, use-cross: true }
-          - { target: aarch64-unknown-linux-musl, os: ubuntu-20.04, use-cross: true }
-          - { target: aarch64-apple-darwin, os: macos-11 }
-          - { target: x86_64-apple-darwin, os: macos-11 }
-          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
-          - { target: x86_64-unknown-linux-musl, os: ubuntu-20.04, use-cross: true }
-          - { target: x86_64-pc-windows-gnu, os: windows-2019 }
-          - { target: x86_64-pc-windows-msvc, os: windows-2019 }
+          # - { target: aarch64-unknown-linux-gnu, os: ubuntu-20.04, use-cross: true }
+          # - { target: aarch64-unknown-linux-musl, os: ubuntu-20.04, use-cross: true }
+          # - { target: aarch64-apple-darwin, os: macos-11 }
+          # - { target: x86_64-apple-darwin, os: macos-11 }
+          # - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
+          # - { target: x86_64-unknown-linux-musl, os: ubuntu-20.04, use-cross: true }
+          # - { target: x86_64-pc-windows-gnu, os: windows-2019 }
+          # - { target: x86_64-pc-windows-msvc, os: windows-2019 }
 
     env:
       RUSTLER_NIF_VERSION: ${{ matrix.nif }}
@@ -54,9 +54,9 @@ jobs:
         shell: bash
         run: |
           case ${{ matrix.job.target }} in
-            arm-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y --no-install-recommends install gcc-arm-linux-gnueabihf libasound2-dev pkg-config ;;
-            aarch64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y --no-install-recommends install gcc-aarch64-linux-gnu libasound2 libasound2-dev pkg-config ;;
-            x86_64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y --no-install-recommends install libasound2-dev pkg-config ;;
+            arm-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y install gcc-arm-linux-gnueabihf ;;
+            aarch64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y install gcc-aarch64-linux-gnu ;;
+            x86_64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y install librust-alsa-sys-dev ;;
           esac
 
       - name: Extract crate information
@@ -99,7 +99,7 @@ jobs:
         shell: bash
         run: |
           if [ "${{ matrix.job.use-cross }}" == "true" ]; then
-            cross build --release --target=${{ matrix.job.target }}
+            PKG_CONFIG_PATH="/usr/arm-linux-gnueabihf/lib" cross build --release --target=${{ matrix.job.target }}
           else
             cargo build --release --target=${{ matrix.job.target }}
           fi

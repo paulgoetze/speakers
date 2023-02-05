@@ -4,10 +4,10 @@ name: Tests
 on:
   push:
     branches:
-      - "main"
+      - "mainx"
   pull_request:
     branches:
-      - "*"
+      - "x*"
 
 jobs:
   tests:

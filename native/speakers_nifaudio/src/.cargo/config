@@ -1,3 +1,9 @@
+[build]
+pre-build = [ # additional commands to run prior to building the package
+    "dpkg --add-architecture $CROSS_DEB_ARCH",
+    "apt-get update && apt-get -y install librust-alsa-sys-dev:$CROSS_DEB_ARCH"
+]
+
 [profile.release]
 lto = true
 
@@ -26,10 +32,3 @@ rustflags = [
 rustflags = [
   "-C", "target-feature=-crt-static"
 ]
-
-[build]
-
-[target.arm-unknown-linux-gnueabihf.libasound]
-linker = "arm-linux-gnueabihf-gcc"
-rustc-link-lib = ["libasound"]
-rustc-link-search = ["/usr/lib/arm-linux-gnueabihf"]
